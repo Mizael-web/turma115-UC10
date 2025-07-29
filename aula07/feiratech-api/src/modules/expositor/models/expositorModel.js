@@ -1,8 +1,8 @@
 
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../../../../config/configDb');
+const { sequelize } = require('../../../config/configDb');
 
-const ExpositorModel = sequelize.define('Expositor', {
+const ExpositorModel = sequelize.define('expositor', {
 
     id:{
         type: DataTypes.INTEGER,

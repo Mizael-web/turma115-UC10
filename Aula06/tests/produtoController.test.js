@@ -1,3 +1,5 @@
+
+// envolver o banco de dados
 const Produto = require('../src/modules/produto/models/produtoModel');
 const ProdutoControler = require('../src/modules/produto/controllers/produtoController');
 const { sequelize } = require('../src/config/configDB');

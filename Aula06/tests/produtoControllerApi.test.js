@@ -1,3 +1,4 @@
+// envolve a apic
 const Produto = require('../src/modules/produto/models/produtoModel');
 const { sequelize } = require('../src/config/configDB');
 const app = require('../index');

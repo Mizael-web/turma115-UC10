@@ -1,28 +1,47 @@
 
 
-const expositor = require('../src/modules/expositor/controllers/expositorControllerApi');
-const { sequelize } = require('../../feiratech-api/config/configDb');
-const app = require('../index');
+const expositorModel = require('../../src/modules/expositor/models/expositorModel');
+const { sequelize } = require('../../src/config/configDb');
+const app = require('../../index');
 const request = require('supertest');
 
 beforeAll(async () => {
+    // criar as tabelas antes de iniciar a switch de testes
     await sequelize.sync({ force: true })
 })
 afterAll(async () => {
+    //encerra a comunicaçao com o banco de dados
     await sequelize.close();
 })
 
-// afterEach(async () => {
-//     // Truncate the table
-//     await expositor.truncate();
-// })
+afterEach(async () => {
+    // limpa a tabela de expositores após cada teste
+    await expositor.truncate();
+})
 
 //TDD Post Expositores
-describe('Testes de integração expositor- expositor POST', () => {
+describe('Testes de integração expositor- endpoint Post/expositor', () => {
     test('POST / Expositor cadastrado com sucesso', async () => {
-        const res = await request(app).post('/expositor').send({ id:"", nome:"joao", email: "joao@email.com", instituicao: "UFRN" })
-        expect(res.status).toBe(201);
-        expect(res.body.msg).toBe("Expositor cadastrado com sucesso");    
+        const res = await req(app).post('/expositor').send({ nome:"joao", email: "joao@email.com", instituicao: "UFRN" })
+        expect(res.status).toBe(201);        
+        expect(res.body.expositor).toHaveProperty("nome");
+        expect(res.bode.expositor.nome).toBe('joao'); 
+        expect(res.body.expositor.email).tobe("email");
+        expect(res.body.expositor.instituicao).toBe("URFN");  
+        expect(res.body.expositorModel.msg).toBe("Expositor cadastrado com sucesso");  
+    }
+    test('Deve apresentar mensagem de errro para duplciar email', async () => {
+        const res = await req(app).post('/expositor').send({ nome:"joao", email: "joao@email.com", instituicao: "UFRN" })
+        const res2 await req (app).post('/expositor').send({nome: "maria, email:"joao@email.com", instituicao: "UFRN" })
+        expect(res2.status).toBe(400);
+        expect(res2.body.msg).toBe("Email já cadastrado");
+    })
+    test('Deve apresentar mensagem de erro para campos vazios', async () => {
+        const res = await req(app).post('/expositor').send({ nome:"", email: "", instituicao: "" })
+        const res2 await req (app).post('/expositor').send({nome: "maria, email:"joao@email.com", instituicao: "UFRN" })
+        expect(res2.status).toBe(400);
+        expect(res2.body.msg).toBe("Email já cadastrado");     
+           
     })
 })
 
