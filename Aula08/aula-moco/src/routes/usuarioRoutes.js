@@ -5,5 +5,6 @@ const router = express.Router();
 
 // Rota para cadastrar usuário
 router.post('/', usuarioController.cadastrarUsuario);
+router.get('/', usuarioController.listarUsuarios);
 
 module.exports = router;

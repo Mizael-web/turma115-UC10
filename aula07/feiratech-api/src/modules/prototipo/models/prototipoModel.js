@@ -1,66 +1,41 @@
-
-
-
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../../../config/configDB');
+const {sequelize} = require('../../../config/configDB');
+const Expositor = require('../../expositor/models/expositorModel');
 
 const PrototipoModel = sequelize.define('Prototipo', {
-
-    id:{
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-        autoIncrement: true
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  titulo: {
+    type: DataTypes.STRING(100),
+    allowNull: false
+  },
+  descricao: {
+    type: DataTypes.STRING(255),
+    allowNull: false
+  },
+  categoria: {
+    type: DataTypes.STRING(50),
+    allowNull: false
+  },
+  expositorId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Expositor,
+      key: 'id'
     },
-    titulo: {
-        type: DataTypes.STRING,    
-        allowNull: false,          
-        validate: {          
-          notEmpty: {
-            msg: "O título deve ser preenchido",
-          },
-        },
-      },
-       
-
-    },
-    desricao: {
-        type: DataTypes.STRING,     
-        allowNull: false,          
-        validate: {          
-          notEmpty: {
-            msg: "A descrição deve ser preenchida",
-          },
-        },
-      },
-    
-      categoria: {
-        type: DataTypes.STRING,    
-        allowNull: false,           
-        validate: {
-          // Validação para aceitar somente uma das opções listadas
-          isIn: {
-            args: [["Inovacao", "Robotica", "Sustentabilidade"]],  // Categorias permitidas
-            msg: "Categoria deve ser: Inovacao, Robotica ou Sustentabilidade.",
-          },
-        },
-      
-      expositorId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'expositor', // Nome da tabela referenciada
-            key: 'id'          // Chave primária da tabela referenciada
-        }       
-
-      }
+    onDelete: 'CASCADE'
+  }
 },
-    {
-        tableName: 'prototipo',
-        createdAt: 'criado_em',
-        updatedAt: 'atualizado_em'
-    },
+{
+  tableName: 'prototipo',
+  createdAt: 'criado_em',
+  updatedAt: 'atualizado_em'
+});
 
-)
+
 
 module.exports = PrototipoModel;
